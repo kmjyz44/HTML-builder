@@ -16,12 +16,16 @@ async function mdir (){
 async function readHtmltem (){
  let articl ='';  
  let head='' ;
+ let foot ='';
  const readHeder = await fs.ReadStream((path.join(__dirname, 'components','header.html')),'utf-8');
  readHeder.on('data', hchunk => head = hchunk);
 
  const readArticl = await fs.ReadStream((path.join(__dirname, 'components','articles.html')),'utf-8');
- readHeder.on('data', hchunk => articl = hchunk);
- console.log(articl);
+ readArticl.on('data', achunk => articl = achunk);
+
+ const readFooter = await fs.ReadStream((path.join(__dirname, 'components','footer.html')),'utf-8');
+ readFooter.on('data', fchunk => foot = fchunk);
+ 
 
 const readableStream = await fs.ReadStream((path.join(__dirname,'template.html')),'utf-8');
                               
@@ -29,9 +33,9 @@ const readableStream = await fs.ReadStream((path.join(__dirname,'template.html')
                                  
                                    function pushHtmltem (err){
                                     let ht =  chunk.replace('{{header}}', head);
-                                     ht =  chunk.replace('{{articles}}', articl);
-                                      // let Htm =(ht.split('\n'));
-                                     //console.log (ht);  
+                                    let artht =  ht.replace('{{articles}}', articl);
+                                    let endHtml = artht.replace('{{footer}}', foot);
+                                     console.log (endHtml);  
                                   if(err){
                                       console.log(err);
                                   }
