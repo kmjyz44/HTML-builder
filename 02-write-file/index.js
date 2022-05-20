@@ -2,7 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { stdin, stdout, exit } = process;
 const output = fs.createWriteStream('destination.txt');
-stdin.on('data', data =>output.write(data))
+console.log('Введите текст:')
+
+stdin.on('data', data => output.write(data))
 
 process.on('exit', () => stdout.write('Удачи!!!'));
 
