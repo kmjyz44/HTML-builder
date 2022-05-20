@@ -35,14 +35,19 @@ const readableStream = await fs.ReadStream((path.join(__dirname,'template.html')
                                     let ht =  chunk.replace('{{header}}', head);
                                     let artht =  ht.replace('{{articles}}', articl);
                                     let endHtml = artht.replace('{{footer}}', foot);
-                                     console.log (endHtml);  
-                                  if(err){
+
+                                    fs.open(path.join(__dirname,'project-dist','index.html'), 'w', (err) => {
+                                        if(err) throw err;
+                
+                                    });
+                                    const output = fs.appendFile(path.join(__dirname,'project-dist','index.html'),endHtml, (err)=>{
+                                        if(err) throw err 
+                                        })
+                                      if(err){
                                       console.log(err);
                                   }
                                 }
-                               // const output = fs.appendFile('bundle.css',chunk, (err)=>{
-                                //if(err) throw err 
-                                //})
+                               
                                 pushHtmltem ();
                                 
                             })
@@ -53,3 +58,93 @@ const readableStream = await fs.ReadStream((path.join(__dirname,'template.html')
                         
 mdir ();
 readHtmltem ()
+
+
+
+async function readd (){
+    try {
+    await fs.readdir (path.join(__dirname,'styles'),(err,files)=>{
+        if(err)
+        console.log(err);
+        else{
+            
+            files.forEach(element => {
+                           if(path.extname(element)=='.css'){
+                            async function stream (){
+                            const readableStream = await fs.ReadStream((path.join(__dirname,'styles',element)));
+                              
+                             readableStream.on('data', chunk => {
+                                
+                                const output = fs.appendFile(path.join(__dirname, 'project-dist','style.css'),chunk, (err)=>{
+                                if(err) throw err 
+                                })
+                                 
+                                })
+                                
+                            readableStream.on('error', error => console.log('error'));
+                            
+                        } 
+                        stream ();     
+                               
+                        }          
+            });
+        
+           
+        }
+    })
+   
+}
+    catch(e){
+        console.log(e)
+    }
+}
+readd();
+
+//copy assets //
+
+
+async function mdir (){
+    try{
+  await fs.mkdir(path.join(__dirname,'project-dist', 'assets'),{ recursive: true }, err => {
+    if (err) throw err;
+})   
+}
+   catch(e){
+       console.log(e);
+   }
+}
+
+async function readDir (){
+    try {
+    await fs.readdir (path.join(__dirname,'assets'),(err,files)=>{
+console.log(files);
+        if(err)
+        console.log(err);
+files.forEach(element => {
+fs.readdir (path.join(__dirname,'assets', element),(err,file)=>{
+       if(err)
+         console.log(err); 
+      
+   
+       fs.mkdir(path.join(__dirname,'project-dist', 'assets', element),{ recursive: true }, err => {
+             if (err) throw err;
+         }) 
+           
+    
+     file.forEach(elements => {   
+   console.log(elements);
+     fs.copyFile((path.join(__dirname,'assets',element,elements)), (path.join(__dirname, 'project-dist','assets',element,elements)), err => {
+        if(err) throw err; // не удалось скопировать файл
+        console.log('Файл успешно скопирован');
+    })
+           })
+        }) 
+})
+})
+    }catch(e){
+        console.log(e);
+        }
+    
+    }
+    mdir ();
+    readDir ();
