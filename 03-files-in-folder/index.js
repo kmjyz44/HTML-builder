@@ -2,10 +2,10 @@ var fs = require('fs');
 var path = require('path');
 
     
-   let files = fs.readdirSync('C:/Git/HTML-builder/03-files-in-folder/secret-folder');
+   let files = fs.readdirSync(path.join(__dirname, 'secret-folder'));
         files.forEach(element => {
            
-           fs.stat("C:/Git/HTML-builder/03-files-in-folder/secret-folder/"+element,function(err,stats){
+           fs.stat(path.join(__dirname, 'secret-folder', element), function(err,stats){
            if(err){
             console.log(err);
            }
