@@ -63,7 +63,7 @@ readHtmltem ()
 
 async function readd (){
     try {
-    await fs.readdir (path.join(__dirname,'styles'),(err,files)=>{
+     fs.readdir (path.join(__dirname,'styles'),(err,files)=>{
         if(err)
         console.log(err);
         else{
