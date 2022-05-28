@@ -12,14 +12,13 @@ async function readd (){
         fs.promises.appendFile('bundle.css',chunk, (err)=>{
           if(err) throw err; 
         });
-                                
-        //readableStream.on('error', error => console.log('error'));
+          
       });           
     }   
                            
   }         
 } 
 async function run (){
-  await readd();
+  await readd().catch(err => {console.log(err);});
 }
 run();
